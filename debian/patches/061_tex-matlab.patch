@@ -1,0 +1,19 @@
+Index: shared-mime-info-0.90/freedesktop.org.xml.in
+===================================================================
+--- shared-mime-info-0.90.orig/freedesktop.org.xml.in	2011-09-26 13:15:23.000000000 +0200
++++ shared-mime-info-0.90/freedesktop.org.xml.in	2011-09-26 13:20:03.000000000 +0200
+@@ -5033,7 +5033,13 @@ command to generate the output files.
+       <match type="string" value="%" offset="0"/>
+     </magic>
+     <magic priority="50">
+-      <match type="string" value="documentclass" offset="1"/>
++      <match value="\\documentclass" type="string" offset="0:100"/>
++    </magic>
++    <magic priority="50">
++      <match value="\\chapter" type="string" offset="0:100"/>
++    </magic>
++    <magic priority="50">
++      <match value="\\section" type="string" offset="0:100"/>
+     </magic>
+   </mime-type>
+   <mime-type type="text/x-texinfo">

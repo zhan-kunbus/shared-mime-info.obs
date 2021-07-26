@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+# -*- mode: makefile; coding: utf-8 -*-
+
+%:
+	dh $@ --no-parallel
+
+override_dh_auto_configure:
+	dh_auto_configure -- \
+		--disable-update-mimedb
+
+override_dh_install:
+	docbook2pdf shared-mime-info-spec.xml
+	docbook2html -o shared-mime-info-spec.html shared-mime-info-spec.xml
+	dh_install
+
+override_dh_compress:
+	dh_compress -X.pdf
+
+override_dh_clean:
+	dh_clean
+	rm -rf shared-mime-info-spec.html shared-mime-info-spec.pdf
