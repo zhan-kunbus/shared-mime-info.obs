@@ -6,7 +6,7 @@
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
-		--disable-update-mimedb
+		--disable-update-mimedb CROSS_COMPILING
 
 override_dh_install:
 	docbook2pdf shared-mime-info-spec.xml
