@@ -1,0 +1,40 @@
+diff -Nurw shared-mime-info-1.10/configure.ac shared-mime-info-1.10-readdir-error-check/configure.ac
+--- shared-mime-info-1.10/configure.ac	2018-06-28 10:02:17.000000000 +0000
++++ shared-mime-info-1.10-readdir-error-check/configure.ac	2020-03-03 20:49:32.000000000 +0000
+@@ -13,6 +13,7 @@
+ dnl Checks for typedefs, structures, and compiler characteristics.
+ AC_C_CONST
+ 
++AC_SYS_LARGEFILE
+ 
+ IT_PROG_INTLTOOL([0.35.0])
+ 
+diff -Nurw shared-mime-info-1.10/update-mime-database.c shared-mime-info-1.10-readdir-error-check/update-mime-database.c
+--- shared-mime-info-1.10/update-mime-database.c	2018-04-24 13:09:19.000000000 +0000
++++ shared-mime-info-1.10-readdir-error-check/update-mime-database.c	2020-03-03 20:50:32.000000000 +0000
+@@ -804,9 +804,12 @@
+ 	}
+ 
+ 	files = g_ptr_array_new();
+-	while ((ent = readdir(dir)))
++	while (TRUE)
+ 	{
+ 		int l;
++		errno = 0;
++		if(!(ent = readdir(dir)))
++			break;
+ 		l = strlen(ent->d_name);
+ 		if (l < 4 || strcmp(ent->d_name + l - 4, ".xml") != 0)
+ 			continue;
+@@ -817,6 +820,11 @@
+ 		}
+ 		g_ptr_array_add(files, g_strdup(ent->d_name));
+ 	}
++	if (errno != 0)
++	{
++		g_printerr("readdir for %s returned errno %d: %s\n", path, errno, strerror(errno));
++		exit(EXIT_FAILURE);
++	}
+ 	closedir(dir);
+ 
+ 	g_ptr_array_sort(files, strcmp2);

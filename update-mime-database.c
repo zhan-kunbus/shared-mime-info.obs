@@ -804,9 +804,12 @@ static void scan_source_dir(const char *path)
 	}
 
 	files = g_ptr_array_new();
-	while ((ent = readdir(dir)))
+	while (TRUE)
 	{
 		int l;
+		errno = 0;
+		if(!(ent = readdir(dir)))
+			break;
 		l = strlen(ent->d_name);
 		if (l < 4 || strcmp(ent->d_name + l - 4, ".xml") != 0)
 			continue;
@@ -816,6 +819,11 @@ static void scan_source_dir(const char *path)
 			continue;
 		}
 		g_ptr_array_add(files, g_strdup(ent->d_name));
+	}
+	if (errno != 0)
+	{
+		g_printerr("readdir for %s returned errno %d: %s\n", path, errno, strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 	closedir(dir);
 
