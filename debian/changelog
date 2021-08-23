@@ -1,3 +1,10 @@
+shared-mime-info (1.13~revpi1) unstable; urgency=medium
+
+  * Enable Large File Support in update-mime-database
+  * Add debug info to check the LFS
+
+ -- Zhi Han <z.han@kunbus.com>  Mon, 26 Jul 2021 11:55:36 +0200
+
 shared-mime-info (1.10-1) unstable; urgency=medium
 
   * New upstream release.
